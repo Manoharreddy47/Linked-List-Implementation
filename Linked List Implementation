@@ -1,0 +1,77 @@
+#include <iostream>
+
+// Node structure for linked list representation of sparse matrix
+struct Node {
+    int row;
+    int col;
+    int value;
+    Node* next;
+
+    // Constructor for convenience
+    Node(int r, int c, int v) : row(r), col(c), value(v), next(nullptr) {}
+};
+
+// SparseMatrix class using linked list
+class SparseMatrix {
+private:
+    Node* head;
+
+public:
+    SparseMatrix() : head(nullptr) {}
+
+    // Insert a non-zero element into the linked list
+    void insert(int row, int col, int value) {
+        // Create a new node
+        Node* newNode = new Node(row, col, value);
+
+        // If list is empty, set head to new node
+        if (head == nullptr) {
+            head = newNode;
+        } else {
+            // Traverse the list and insert at the end
+            Node* temp = head;
+            while (temp->next != nullptr) {
+                temp = temp->next;
+            }
+            temp->next = newNode;
+        }
+    }
+
+    // Print the sparse matrix
+    void print() const {
+        Node* temp = head;
+        while (temp != nullptr) {
+            std::cout << "Row: " << temp->row
+                      << ", Column: " << temp->col
+                      << ", Value: " << temp->value
+                      << std::endl;
+            temp = temp->next;
+        }
+    }
+
+    // Destructor to free allocated memory
+    ~SparseMatrix() {
+        Node* current = head;
+        Node* nextNode;
+        while (current != nullptr) {
+            nextNode = current->next;
+            delete current;
+            current = nextNode;
+        }
+    }
+};
+
+// Main function to demonstrate the SparseMatrix usage
+int main() {
+    SparseMatrix matrix;
+
+    // Inserting some non-zero elements
+    matrix.insert(0, 0, 10);
+    matrix.insert(1, 2, 20);
+    matrix.insert(3, 1, 30);
+
+    // Print the sparse matrix
+    matrix.print();
+
+    return 0;
+}
